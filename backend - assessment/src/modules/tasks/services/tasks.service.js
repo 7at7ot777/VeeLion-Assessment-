@@ -6,13 +6,13 @@ const HttpError = require('../../../utils/httpError');
 
 const TASKS_FILE_PATH = path.join(process.cwd(), 'data', 'tasks.json');
 
-function buildTaskRecord(payload) {
+function buildTaskRecord({ title, completed }) {
   const now = new Date().toISOString();
 
   return {
     id: createId(),
-    title: payload.title,
-    completed: payload.completed,
+    title,
+    completed,
     createdAt: now,
     updatedAt: now,
   };
@@ -34,24 +34,6 @@ async function getTaskById(taskId) {
 }
 
 async function createTask(payload) {
-  if (!payload.title || typeof payload.title !== 'string') {
-    throw new HttpError(400, 'Invalid title.');
-  }
-
-  const title = payload.title.trim();
-  if (!title) {
-    throw new HttpError(400, 'title cannot be empty');
-  }
-  payload.title = title;
-
-  if (payload.completed !== undefined && typeof payload.completed !== 'boolean') {
-    throw new HttpError(400, 'Invalid completed value.');
-  }
-
-  if (payload.completed === undefined) {
-    payload.completed = false;
-  }
-
   const tasks = await readJsonArray(TASKS_FILE_PATH);
   const newTask = buildTaskRecord(payload);
 
@@ -62,21 +44,6 @@ async function createTask(payload) {
 }
 
 async function updateTask(taskId, updates) {
-  if (updates.title !== undefined) {
-    if (typeof updates.title !== 'string') {
-      throw new HttpError(400, 'title should be string');
-    }
-    const title = updates.title.trim();
-    if (!title) {
-      throw new HttpError(400, 'title cannot be empty');
-    }
-    updates.title = title;
-  }
-
-  if (updates.completed !== undefined && typeof updates.completed !== 'boolean') {
-    throw new HttpError(400, 'completed must be boolean');
-  }
-
   const tasks = await readJsonArray(TASKS_FILE_PATH);
   const taskIndex = tasks.findIndex((item) => item.id === taskId);
 
