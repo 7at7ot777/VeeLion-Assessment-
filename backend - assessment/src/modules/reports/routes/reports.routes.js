@@ -5,6 +5,12 @@ const reportsController = require('../controllers/reports.controller');
 
 const reportsRouter = express.Router();
 
-reportsRouter.get('/', asyncHandler(reportsController.getTasksSummary));
+reportsRouter.get(
+  '/tasks-summary',
+  asyncHandler(reportsController.getTasksSummary)
+);
+
+// Deprecated alias, kept so existing `GET /reports` callers keep working.
+reportsRouter.get('/', asyncHandler(reportsController.getTasksSummaryDeprecated));
 
 module.exports = reportsRouter;

@@ -9,17 +9,7 @@ async function getAllActivity() {
 }
 
 async function createNewActivity(activityData) {
-  // Validate action
-  if (typeof activityData.action !== 'string') {
-    throw new Error('Action must be a string');
-  }
-  const action = activityData.action.trim();
-  if (!action) {
-    throw new Error('Action cannot be empty');
-  }
-
-  // Info is optional, can be any type (we'll store as is)
-  const info = activityData.info;
+  const { action, info } = activityData;
 
   const activities = await readJsonArray(FP);
   const newActivity = {

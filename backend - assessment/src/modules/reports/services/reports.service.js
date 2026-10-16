@@ -14,8 +14,9 @@ async function getTasksSummary() {
 
   const doneCount = tasks.filter((task) => task.completed).length;
   const todoCount = total - doneCount;
-  // In-progress count is not available from current data, set to 0
-  const inProgressCount = 0;
+  // Task rows only store boolean `completed`, there is no
+  // `in-progress` state in the data, so it stays 0.
+  const inProgressCount = 0; // task state is boolean, so it's either completed or to-do.
 
   const recentActivityCount = activities.length;
 

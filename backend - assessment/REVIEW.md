@@ -45,3 +45,26 @@
   - Note: this saves one loop but will not matter much, because reading and parsing the whole JSON file is the slow part, not the loop.
 - What I changed:
   - Count finished tasks once, then get the rest by subtraction: `todo = total - done`.
+
+---
+
+## Change 3 — Build the reports summary endpoint to spec
+- Status: Done
+- Files changed: `src/modules/reports/routes/reports.routes.js`, `src/modules/reports/controllers/reports.controller.js`, `src/modules/reports/services/reports.service.js`
+- Type: Bugs, Maintainability, Code quality
+- What was wrong:
+  - The address was wrong. The task asks for `GET /reports/tasks-summary`, but the code only had `GET /reports`.
+  - The answer was wrapped in an extra layer (`{ data: ... }`), but the task example and the frontend docs expect the plain object (`{ total, byStatus, recentActivityCount }`).
+  - The safety wrapper (`asyncHandler`) was applied twice: once in the controller and once in the route.
+  - The "recent activity" number counted all activities ever, not recent ones. The name did not match what it counted.
+- Why this was bad:
+  - Anyone calling the documented address got a "not found" error.
+  - The frontend expects the plain shape, so the extra wrapper would break it.
+  - Double wrapping is dead code that confuses the next reader.
+  - An all-time count called "recent" is misleading.
+- What I changed:
+  - Added the correct address `GET /reports/tasks-summary`. The old address `GET /reports` still works as an old alias so nothing breaks, and it can be removed later.
+  - The endpoint now returns the plain object, matching the example and the frontend docs.
+  - The wrapper is now only in the route file, same as the tasks module.
+  - "Recent" now has a clear meaning: activities from the last 7 days. Dates that are missing or invalid are skipped.
+  - `in-progress` stays `0` because tasks only have `completed: true/false` — there is no in-progress state in the saved data.

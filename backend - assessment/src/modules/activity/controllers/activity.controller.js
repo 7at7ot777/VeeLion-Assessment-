@@ -1,4 +1,5 @@
 const aSvc = require('../services/activity.service');
+const { validateCreateActivity } = require('../utils/activityValidator');
 
 async function get_activity(req, res) {
   const x = await aSvc.getAllActivity();
@@ -6,7 +7,7 @@ async function get_activity(req, res) {
 }
 
 async function addActivity(req, res) {
-  const bodyData = req.body || {};
+  const bodyData = validateCreateActivity(req.body);
   const made = await aSvc.createNewActivity(bodyData);
   res.status(201).json(made);
 }
