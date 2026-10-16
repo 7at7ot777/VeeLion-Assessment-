@@ -31,3 +31,17 @@
   - The controller now checks the data once using `validateCreateTask` / `validateUpdateTask` and sends only clean data (`title`, `completed`) to the service.
   - Extra fields are rejected with a clear error.
   - The service no longer repeats the checks. Creating a task uses only `title` and `completed`. Updating keeps the old task and only replaces the new values, plus a fresh `updatedAt`. `id` and `createdAt` stay untouched.
+
+---
+
+## Change 2 — Count todo as total minus done in reports
+- Status: Done
+- Files changed: `src/modules/reports/services/reports.service.js`
+- Type: Performance, Code quality
+- What was wrong:
+  - The code looped through all tasks twice: once to count unfinished tasks and once to count finished ones.
+- Why this was bad:
+  - Two loops for one answer. With the current data (a task is either done or not done), the unfinished count is simply the total minus the finished count.
+  - Note: this saves one loop but will not matter much, because reading and parsing the whole JSON file is the slow part, not the loop.
+- What I changed:
+  - Count finished tasks once, then get the rest by subtraction: `todo = total - done`.

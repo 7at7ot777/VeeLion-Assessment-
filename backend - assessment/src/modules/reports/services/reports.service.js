@@ -12,8 +12,8 @@ async function getTasksSummary() {
 
   const total = tasks.length;
 
-  const todoCount = tasks.filter(task => !task.completed).length;
-  const doneCount = tasks.filter(task => task.completed).length;
+  const doneCount = tasks.filter((task) => task.completed).length;
+  const todoCount = total - doneCount;
   // In-progress count is not available from current data, set to 0
   const inProgressCount = 0;
 
