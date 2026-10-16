@@ -28,6 +28,22 @@
   - Loading and error states: loading message while fetching; on failure an error card with the backend's message plus a working Retry button.
 - Verification: `npm run build` passes; live-tested with the real backend — cards render 3 / 2 / 0 / 1 / 3 matching the API; killed the backend to confirm the error state shows ("fetch failed" + Retry), restarted it, clicked Retry, and the data returned. Home links to all three modules.
 
+---
+
+## Change 3 — Polish the UI and move styles into CSS classes
+- Status: Done
+- Files changed: `app/globals.css`, `app/page.tsx`, `app/tasks/page.tsx`, `app/activity/page.tsx`, `app/reports/page.tsx`, `components/tasks/*`, `components/activity/*`, `components/reports/*`
+- Type: UX issues, Code quality
+- What was wrong:
+  - The stylesheet was minimal and everything was styled with inline `style={{ }}` objects; pages looked flat and the components couldn't share styles.
+- Why it was bad:
+  - Inline styles can't be reused or themed and repeated layout rules (cards, rows, badges) were duplicated in JSX.
+- What was changed:
+  - Rebuilt `globals.css` as a small design system: color tokens, typographic scale, card shadows with hover lift, button/badge variants (status-todo/status-done colors), stat-card, list, alert, empty-state, focus-visible outlines, and a mobile breakpoint.
+  - Removed all inline styles from pages and components — they now use the shared classes; `grep style={{}}` returns nothing.
+  - Visual result: consistent page headers, colored status badges (amber/green), stat cards grid on Reports, card grids on Home.
+- Verification: `npm run build` passes; all four pages screenshot-verified with data from the live backend.
+
 
 ---
 
