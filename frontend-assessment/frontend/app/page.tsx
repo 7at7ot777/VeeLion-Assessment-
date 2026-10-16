@@ -3,22 +3,25 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main>
-      <header className="stack" style={{ marginBottom: "1.5rem" }}>
+      <header className="page-header card">
         <h1 style={{ margin: 0 }}>VeeLion Frontend Assessment</h1>
-        <p style={{ margin: 0, color: "var(--muted)" }}>
-          Two separate modules built against the provided backend.
-        </p>
+        <p className="description">Task Dashboard, Activity Feed, and Reports — built against the provided backend.</p>
       </header>
 
-      <section className="stack" style={{ gridTemplateColumns: "repeat(auto-fit, minmax(260px, 1fr))" }}>
-        <Link href="/tasks" className="card" style={{ padding: "1rem", display: "block" }}>
-          <h2 style={{ marginTop: 0 }}>Task Dashboard</h2>
-
+      <section className="grid-auto">
+        <Link href="/tasks" className="card card-hover" style={{ padding: "1.1rem", display: "block" }}>
+          <h2 style={{ margin: "0 0 0.4rem" }}>Task Dashboard</h2>
+          <p className="description">Browse tasks and switch their status.</p>
         </Link>
 
-        <Link href="/activity" className="card" style={{ padding: "1rem", display: "block" }}>
-          <h2 style={{ marginTop: 0 }}>Activity Feed</h2>
+        <Link href="/activity" className="card card-hover" style={{ padding: "1.1rem", display: "block" }}>
+          <h2 style={{ margin: "0 0 0.4rem" }}>Activity Feed</h2>
+          <p className="description">Search everything that has happened.</p>
+        </Link>
 
+        <Link href="/reports" className="card card-hover" style={{ padding: "1.1rem", display: "block" }}>
+          <h2 style={{ margin: "0 0 0.4rem" }}>Reports</h2>
+          <p className="description">Summary of tasks and recent activity.</p>
         </Link>
       </section>
     </main>

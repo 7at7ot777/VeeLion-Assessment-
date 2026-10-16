@@ -14,6 +14,23 @@
 
 ---
 
+## Change 2 — Build the /reports module
+- Status: Done
+- Files changed: new `types/api.ts` (`TasksSummary`), new `lib/backendApi.ts` fetcher (`getReportsSummaryFromBackend`), new `app/api/reports/tasks-summary/route.ts` proxy, new `hooks/useReports.ts`, new `components/reports/StatCard.tsx`, new `components/reports/ReportsSummary.tsx`, new `app/reports/page.tsx`, `app/page.tsx` (home link)
+- Type: Maintainability
+- What was wrong:
+  - The required `/reports` page did not exist — no types, no proxy, no fetcher, no page, and no way to navigate to it.
+- Why it was bad:
+  - A module the brief requires was missing from the app.
+- What was changed:
+  - Follows the existing module pattern end to end: `TasksSummary` type → `getReportsSummaryFromBackend()` (reads `GET /reports/tasks-summary`, raw shape) → proxy route `app/api/reports/tasks-summary` → `useReports` hook (loading/error/retry) → `ReportsSummary` renders five stat cards: Total tasks, Todo, In progress, Done, and Recent activity ("Last 7 days" hint).
+  - Added a `/reports` card on the home page so the module is reachable.
+  - Loading and error states: loading message while fetching; on failure an error card with the backend's message plus a working Retry button.
+- Verification: `npm run build` passes; live-tested with the real backend — cards render 3 / 2 / 0 / 1 / 3 matching the API; killed the backend to confirm the error state shows ("fetch failed" + Retry), restarted it, clicked Retry, and the data returned. Home links to all three modules.
+
+
+---
+
 ## Change 1 — Refactor the activity feed module
 - Status: Done
 - Files changed: `app/activity/page.tsx`, new `hooks/useActivity.ts`, new `components/activity/ActivitySearch.tsx`, `components/activity/ActivityList.tsx`, `components/activity/ActivityItem.tsx`, new `lib/http.ts`, `hooks/useTasks.ts`
