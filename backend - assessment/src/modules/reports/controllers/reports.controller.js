@@ -11,5 +11,6 @@ async function getTasksSummary(req, res) {
 }
 
 module.exports = {
-  getTasksSummary: getTasksSummaryDeprecated,
+  getTasksSummary,
+  getTasksSummaryDeprecated,
 };
