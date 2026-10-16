@@ -11,7 +11,7 @@ export default function ReportsPage() {
       </nav>
 
       <header className="page-header card">
-        <h1 style={{ margin: 0 }}>Reports</h1>
+        <h1>Reports</h1>
         <p className="description">Summary of tasks and recent activity.</p>
       </header>
 

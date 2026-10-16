@@ -9,8 +9,8 @@ type ActivityListProps = {
 export function ActivityList({ activity, total }: ActivityListProps) {
   if (activity.length === 0) {
     return (
-      <section className="card" style={{ padding: "1rem" }}>
-        <p style={{ margin: 0, color: "var(--muted)" }}>
+      <section className="card empty-state">
+        <p className="empty-title">
           {total === 0 ? "No activity recorded yet." : "No activity matches this search."}
         </p>
       </section>
@@ -19,7 +19,7 @@ export function ActivityList({ activity, total }: ActivityListProps) {
 
   return (
     <section aria-label="Activity feed">
-      <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "0.7rem" }}>
+      <ul className="list-reset">
         {activity.map((item) => (
           <ActivityItem key={item.id} activity={item} />
         ))}

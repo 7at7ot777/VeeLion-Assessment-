@@ -24,7 +24,7 @@ export function TaskDashboard() {
   return (
     <section className="stack">
       <header className="page-header card">
-        <h1 style={{ margin: 0 }}>Task Dashboard</h1>
+        <h1>Task Dashboard</h1>
       </header>
 
       <StatusFilter value={filter} onChange={setFilter} />

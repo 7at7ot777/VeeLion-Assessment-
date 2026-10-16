@@ -80,6 +80,10 @@ main {
   gap: 0.55rem;
 }
 
+.page-header h1 {
+  margin: 0;
+}
+
 .page-header .description {
   margin: 0;
   color: var(--muted);
@@ -228,6 +232,15 @@ main {
 .badge.status-done {
   background: var(--ok-soft);
   color: var(--ok);
+}
+
+.tile {
+  padding: 1.1rem;
+  display: block;
+}
+
+.tile h2 {
+  margin: 0 0 0.4rem;
 }
 
 .button {

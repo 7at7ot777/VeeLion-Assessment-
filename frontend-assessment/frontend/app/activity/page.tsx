@@ -18,7 +18,7 @@ export default function ActivityPage() {
       </nav>
 
       <header className="page-header card">
-        <h1 style={{ margin: 0 }}>Activity Feed</h1>
+        <h1>Activity Feed</h1>
         <ActivitySearch value={query} onChange={setQuery} />
         <small className="countline">
           Total: {total} | Showing: {visibleActivity.length}
