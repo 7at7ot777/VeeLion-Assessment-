@@ -2,16 +2,16 @@ const { createId } = require('../../../utils/id');
 const { readJsonArray, writeJsonArray } = require('../../../utils/jsonStore');
 const path = require('node:path');
 
-const FP = path.join(process.cwd(), 'data', 'activity.json');
+const activityLogDirectory = path.join(process.cwd(), 'data', 'activity.json');
 
 async function getAllActivity() {
-  return readJsonArray(FP);
+  return readJsonArray(activityLogDirectory);
 }
 
 async function createNewActivity(activityData) {
   const { action, info } = activityData;
 
-  const activities = await readJsonArray(FP);
+  const activities = await readJsonArray(activityLogDirectory);
   const newActivity = {
     id: createId(),
     action,
@@ -20,7 +20,7 @@ async function createNewActivity(activityData) {
   };
 
   activities.push(newActivity);
-  await writeJsonArray(FP, activities);
+  await writeJsonArray(activityLogDirectory, activities);
 
   return newActivity;
 }
