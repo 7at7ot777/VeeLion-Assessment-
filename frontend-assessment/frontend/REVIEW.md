@@ -44,6 +44,20 @@
   - Visual result: consistent page headers, colored status badges (amber/green), stat cards grid on Reports, card grids on Home.
 - Verification: `npm run build` passes; all four pages screenshot-verified with data from the live backend.
 
+---
+
+## Change 4 — Ignore the local .env file
+- Status: Done
+- Files changed: `.gitignore`
+- Type: Maintainability
+- What was wrong:
+  - `.gitignore` covered the `.env.local*` variants but not `.env` itself, so the local backend URL file would be picked up as a committable change.
+- Why it was bad:
+  - `.env` is machine-specific local setup; committing it or accidentally staging it creates noisy diffs and risks leaking local config.
+- What was changed:
+  - Added `.env` to `.gitignore` — confirmed working with `git check-ignore`. The committed `.env.example` remains the documented template for setting `NEXT_PUBLIC_BACKEND_API_URL`.
+- Verification: `git status` no longer lists `.env` as untracked; `npm run build` still passes.
+
 
 ---
 
