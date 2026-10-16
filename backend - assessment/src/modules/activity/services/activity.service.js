@@ -2,26 +2,16 @@ const { createId } = require('../../../utils/id');
 const { readJsonArray, writeJsonArray } = require('../../../utils/jsonStore');
 const path = require('node:path');
 
-const FP = path.join(process.cwd(), 'data', 'activity.json');
+const activityLogDirectory = path.join(process.cwd(), 'data', 'activity.json');
 
 async function getAllActivity() {
-  return readJsonArray(FP);
+  return readJsonArray(activityLogDirectory);
 }
 
 async function createNewActivity(activityData) {
-  // Validate action
-  if (typeof activityData.action !== 'string') {
-    throw new Error('Action must be a string');
-  }
-  const action = activityData.action.trim();
-  if (!action) {
-    throw new Error('Action cannot be empty');
-  }
+  const { action, info } = activityData;
 
-  // Info is optional, can be any type (we'll store as is)
-  const info = activityData.info;
-
-  const activities = await readJsonArray(FP);
+  const activities = await readJsonArray(activityLogDirectory);
   const newActivity = {
     id: createId(),
     action,
@@ -30,7 +20,7 @@ async function createNewActivity(activityData) {
   };
 
   activities.push(newActivity);
-  await writeJsonArray(FP, activities);
+  await writeJsonArray(activityLogDirectory, activities);
 
   return newActivity;
 }
