@@ -81,3 +81,26 @@
   - Behavior kept identical apart from the intended improvements: search, counts, and item contents work exactly as before.
 - Verification: `npm run build` passes; live-tested against the running backend (list loads 3/3, search filters 3 → 1, no-hit search shows "No activity matches this search.", clearing restores 3/3).
 
+---
+
+## Change 5 — Visual refresh: app shell, iconography and richer states
+- Status: Done
+- Files changed: `app/globals.css`, `app/layout.tsx`, `app/page.tsx`, `app/tasks/page.tsx`, `app/activity/page.tsx`, `app/reports/page.tsx`, `hooks/useTasks.ts`, `components/tasks/*`, `components/activity/*`, `components/reports/*`, new `components/layout/AppNav.tsx`, new `components/home/LiveStats.tsx`, new `components/ui/` (`icons.tsx`, `Skeleton.tsx`, `EmptyState.tsx`, `ErrorState.tsx`), new `lib/format.ts`
+- Type: UX issues, Code quality
+- What was wrong:
+  - The app had no product shell: every page started with a bare "Back" button, and there was no navigation or branding anywhere.
+  - All four screens were flat walls of white cards — no icons, no visual hierarchy, raw `toLocaleString()` timestamps, and plain-text loading states ("Loading tasks…") that did not match the layout that replaced them.
+  - Empty, error and filter states were plain sentences, and filters were unstyled pills with no counts.
+- Why it was bad:
+  - Moving between modules meant bouncing through the home page; the flat presentation made scanning tasks / activity / stats slow, and the placeholder text states made the app look unfinished (and caused layout jumps when data arrived).
+- What was changed:
+  - **App shell:** sticky blurred top navigation with brand mark and Tasks / Activity / Reports links (active link highlighted via `usePathname`, `aria-current="page"`); the per-page "Back" buttons are gone; slim page footer. Updated `metadata` to "VeeLion Task Manager".
+  - **Design system (`globals.css`):** rebuilt tokens (status accent set, brighter bar colors, focus ring), plus new building blocks — hero gradient, nav, segmented control, timeline, distribution bar, chips, dotted badges, shimmer skeletons, icon chips, empty/error cards, and a `prefers-reduced-motion` block.
+  - **Home:** gradient hero with live counts (total / completed / events, fetched from the reports API by a small `LiveStats` component that fails silently if the backend is down) and module tiles with icon chips and hover affordances.
+  - **Tasks:** module header with completion summary bar (`1 of 3 complete · 33%`); filters are now a segmented control with per-filter counts; rows use a round check control (with inline busy spinner; same "Mark as completed/pending" action, now a proper `aria-pressed` toggle), struck-through completed titles, relative "Updated 2h ago" timestamps and dotted status badges.
+  - **Activity:** search field with icon and a clear button, event/summary chips, and a refresh button; rows are now a timeline (rail + node + card) with relative times.
+  - **Reports:** stat cards gained tone-colored icon chips and hints; the completion card shows the percentage plus a segmented distribution bar with a legend (todo / in-progress / done) instead of a single bar.
+  - Loading states are layout-matching shimmer skeletons everywhere (`SkeletonRows`, `SkeletonStatGrid`); errors use a shared `ErrorState` (icon + message + Retry); empty views use a shared `EmptyState`.
+  - New shared `lib/format.ts` (`formatRelativeTime` / `formatDateTime`) replaces raw `toLocaleString()`; new dependency-free `components/ui/icons.tsx` (stroke SVG set) powers all iconography.
+- Verification: `npm run build` passes (type-check + 10 routes); live-tested — task toggle flips Pending ↔ Completed and updates the progress summary back and forth; activity search filters 3 → 1 → 3 with the clear button; reports render 3 / 2 / 0 / 1 / 3 with a 33 % distribution; all four pages screenshot-verified.
+
