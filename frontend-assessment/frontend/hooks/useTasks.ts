@@ -64,9 +64,19 @@ export function useTasks() {
     return tasks;
   }, [tasks, filter]);
 
+  const counts = useMemo<Record<TaskFilter, number>>(
+    () => ({
+      all: tasks.length,
+      completed: tasks.filter((task) => task.completed).length,
+      pending: tasks.filter((task) => !task.completed).length,
+    }),
+    [tasks]
+  );
+
   return {
     tasks,
     filteredTasks,
+    counts,
     filter,
     loading,
     error,

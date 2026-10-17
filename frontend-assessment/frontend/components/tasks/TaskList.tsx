@@ -1,4 +1,5 @@
 import type { Task } from "@/types/api";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { TaskItem } from "@/components/tasks/TaskItem";
 
 type TaskListProps = {
@@ -10,9 +11,11 @@ type TaskListProps = {
 export function TaskList({ tasks, updatingTaskId, onToggle }: TaskListProps) {
   if (tasks.length === 0) {
     return (
-      <section className="card empty-state">
-        <p className="empty-title">No tasks match this filter.</p>
-      </section>
+      <EmptyState
+        icon="inbox"
+        title="No tasks in this view"
+        hint="Try a different filter, or check back once new tasks are added."
+      />
     );
   }
 

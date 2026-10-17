@@ -2,19 +2,20 @@ import type { TaskFilter } from "@/types/api";
 
 const FILTERS: Array<{ label: string; value: TaskFilter }> = [
   { label: "All", value: "all" },
-  { label: "Completed", value: "completed" },
   { label: "Pending", value: "pending" },
+  { label: "Completed", value: "completed" },
 ];
 
 type StatusFilterProps = {
   value: TaskFilter;
+  counts: Record<TaskFilter, number> | null;
   onChange: (value: TaskFilter) => void;
 };
 
-export function StatusFilter({ value, onChange }: StatusFilterProps) {
+export function StatusFilter({ value, counts, onChange }: StatusFilterProps) {
   return (
-    <section aria-label="Filter tasks by status" className="card page-header controls">
-      <div className="filter-row">
+    <section aria-label="Filter tasks by status" className="card filter-card">
+      <div className="segmented" role="group">
         {FILTERS.map((filter) => {
           const active = filter.value === value;
 
@@ -22,11 +23,12 @@ export function StatusFilter({ value, onChange }: StatusFilterProps) {
             <button
               key={filter.value}
               type="button"
-              className={active ? "button primary" : "button"}
+              className={active ? "seg-item active" : "seg-item"}
               onClick={() => onChange(filter.value)}
               aria-pressed={active}
             >
               {filter.label}
+              {counts ? <span className="seg-count">{counts[filter.value]}</span> : null}
             </button>
           );
         })}

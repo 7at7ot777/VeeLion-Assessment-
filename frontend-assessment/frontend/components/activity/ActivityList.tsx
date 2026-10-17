@@ -1,4 +1,5 @@
 import type { ActivityLog } from "@/types/api";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { ActivityItem } from "@/components/activity/ActivityItem";
 
 type ActivityListProps = {
@@ -8,18 +9,24 @@ type ActivityListProps = {
 
 export function ActivityList({ activity, total }: ActivityListProps) {
   if (activity.length === 0) {
-    return (
-      <section className="card empty-state">
-        <p className="empty-title">
-          {total === 0 ? "No activity recorded yet." : "No activity matches this search."}
-        </p>
-      </section>
+    return total === 0 ? (
+      <EmptyState
+        icon="inbox"
+        title="No activity recorded yet"
+        hint="Actions performed on tasks will show up here."
+      />
+    ) : (
+      <EmptyState
+        icon="search"
+        title="Nothing matches your search"
+        hint="Try a different keyword or clear the search field."
+      />
     );
   }
 
   return (
     <section aria-label="Activity feed">
-      <ul className="list-reset">
+      <ul className="timeline">
         {activity.map((item) => (
           <ActivityItem key={item.id} activity={item} />
         ))}
