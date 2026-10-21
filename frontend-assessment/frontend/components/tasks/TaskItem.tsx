@@ -1,4 +1,6 @@
 import type { Task } from "@/types/api";
+import { Icon } from "@/components/ui/icons";
+import { formatDateTime, formatRelativeTime } from "@/lib/format";
 
 type TaskItemProps = {
   task: Task;
@@ -7,35 +9,40 @@ type TaskItemProps = {
 };
 
 export function TaskItem({ task, busy, onToggle }: TaskItemProps) {
+  const actionLabel = task.completed ? "Mark as pending" : "Mark as completed";
+
   return (
-    <li
-      className="card"
-      style={{
-        padding: "0.85rem",
-        display: "grid",
-        gap: "0.4rem",
-      }}
-    >
-      <div style={{ display: "flex", justifyContent: "space-between", gap: "0.8rem", alignItems: "start" }}>
-        <p style={{ margin: 0, fontWeight: 600 }}>{task.title}</p>
-        <span className="badge">{task.completed ? "Completed" : "Pending"}</span>
+    <li className={`card item task-item${task.completed ? " is-done" : ""}`}>
+      <button
+        type="button"
+        className={task.completed ? "check-toggle checked" : "check-toggle"}
+        onClick={() => onToggle(task)}
+        disabled={busy}
+        aria-pressed={task.completed}
+        aria-label={`${actionLabel}: ${task.title}`}
+        title={actionLabel}
+      >
+        {busy ? (
+          <span className="spinner" />
+        ) : task.completed ? (
+          <Icon name="check" size={13} strokeWidth={3} />
+        ) : null}
+      </button>
+
+      <div className="task-body">
+        <p className="item-title task-title">{task.title}</p>
+        <span className="task-meta">
+          <Icon name="clock" size={13} />
+          <span title={formatDateTime(task.updatedAt)}>
+            Updated {formatRelativeTime(task.updatedAt)}
+          </span>
+        </span>
       </div>
 
-      <small style={{ color: "var(--muted)" }}>
-        Updated: {new Date(task.updatedAt).toLocaleString()}
-      </small>
-
-      <div>
-        <button
-          type="button"
-          className="button"
-          onClick={() => onToggle(task)}
-          disabled={busy}
-          aria-label={`Mark ${task.title} as ${task.completed ? "pending" : "completed"}`}
-        >
-          {busy ? "Saving..." : task.completed ? "Mark as Pending" : "Mark as Completed"}
-        </button>
-      </div>
+      <span className={`badge ${task.completed ? "status-done" : "status-todo"}`}>
+        <span className="dot" />
+        {task.completed ? "Completed" : "Pending"}
+      </span>
     </li>
   );
 }
